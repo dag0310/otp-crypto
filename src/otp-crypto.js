@@ -29,7 +29,6 @@
 
   publicMethods.xorByteArrays = function (messageBytes, keyBytes) {
     if (messageBytes.length > keyBytes.length) {
-      console.error('Key must be greater than or equal to text size.')
       return null
     }
     const resultBytes = new Uint8Array(messageBytes.length)
