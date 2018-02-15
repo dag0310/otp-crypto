@@ -1,0 +1,47 @@
+{
+  "name": "otp-crypto",
+  "version": "1.0.0",
+  "description": "One-time pad crypto library for plaintext data exchange.",
+  "main": "src/otp-crypto.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint src/*.js spec/*.js",
+    "test": "./node_modules/.bin/karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dag0310/otp-crypto.git"
+  },
+  "keywords": [
+    "otp",
+    "one-time pad",
+    "vernam",
+    "xor",
+    "cryptography",
+    "crypto",
+    "library",
+    "lib",
+    "js",
+    "javascript",
+    "text compression"
+  ],
+  "author": "Daniel Geymayer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dag0310/otp-crypto/issues"
+  },
+  "homepage": "https://github.com/dag0310/otp-crypto#readme",
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jasmine": "^2.9.2",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jasmine-core": "^2.99.1",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.1"
+  }
+}

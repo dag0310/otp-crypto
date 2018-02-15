@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>OTP Crypto</title>
+    <style>
+      body {
+        text-align: center;
+      }
+      textarea {
+        width: 45%;
+        height: 300px;
+      }
+      .mainBtn {
+        width: 40%;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>OTP Crypto</h1>
+    <input autocomplete="off" readonly value="°^^!§$%&/()=?1234567890ßqwertzuiopü+asdfghjklöä#yxcvbnm,.-QWERTZUIOPÜ*ASDFGHJKLÖÄ'YXCVBNM;:_😩">
+    <br>
+    <textarea id="input" autocomplete="off">HALLO 1 2 3.</textarea>
+    <textarea id="output" autocomplete="off"></textarea>
+    <br>
+    <button type="button" class="mainBtn" onclick="encryptDecrypt()">Encrypt / Decrypt</button>
+    <br><br>
+    Remaining key length: <span id="remainingKeyLength"></span>
+    <button type="button" onclick="resetKeys()">Reset keys</button>
+
+    <!-- JavaScript -->
+    <script src="../src/otp-crypto.js"></script>
+    <script>
+      const DEFAULT_KEY_LENGTH = 1000
+      let keySender, keyReceiver
+
+      function encryptDecrypt() {
+        // Encrypt
+        const plaintextUnencrypted = document.getElementById('input').value
+        const otpEncrypted = OtpCrypto.encrypt(plaintextUnencrypted, keySender)
+        if (otpEncrypted === null) {
+          alert('The key is not long enough - please reset it.')
+          return
+        }
+        keySender = otpEncrypted.remainingKey
+        console.log('otpEncrypted:')
+        console.log(otpEncrypted)
+
+        // Decrypt
+        const otpDecrypted = OtpCrypto.decrypt(otpEncrypted.base64Encrypted, keyReceiver)
+        output.value = otpDecrypted.plaintextDecrypted
+        keyReceiver = otpDecrypted.remainingKey
+        console.log('otpDecrypted:')
+        console.log(otpDecrypted)
+
+        // Update remaining key length info
+        document.getElementById('remainingKeyLength').textContent = keySender.length
+      }
+
+      function resetKeys() {
+        keySender = OtpCrypto.generateRandomBytes(DEFAULT_KEY_LENGTH)
+        keyReceiver = keySender.slice(0)
+        document.getElementById('remainingKeyLength').textContent = keySender.length
+      }
+
+      resetKeys()
+    </script>
+  </body>
+</html>
