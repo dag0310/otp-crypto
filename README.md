@@ -9,11 +9,11 @@ let keyReceiver = keySender.slice(0) // copy of key, which in real-life needs to
 
 // Encrypt a message to Base64 with the sender's key:
 const secretMessageUnencrypted = 'TOP SECRET MESSAGE.'
-const otpEncrypted = OtpCrypto.encrypt(secretMessageUnencrypted, keySender) // {base64Encrypted, remainingKey}
+const otpEncrypted = OtpCrypto.encrypt(secretMessageUnencrypted, keySender) // {base64Encrypted, remainingKey}, returns null if the key is too short
 keySender = otpEncrypted.remainingKey
 
 // Decrypt the message to plaintext with the receiver's key:
-const otpDecrypted = OtpCrypto.decrypt(otpEncrypted.base64Encrypted, keyReceiver) // {plaintextDecrypted, remainingKey}
+const otpDecrypted = OtpCrypto.decrypt(otpEncrypted.base64Encrypted, keyReceiver) // {plaintextDecrypted, remainingKey}, returns null if the key is too short
 keyReceiver = otpDecrypted.remainingKey
 
 // Extract the decrypted message
