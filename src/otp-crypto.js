@@ -36,13 +36,9 @@
     return resultBytes
   }
 
-  const encrypt = xorByteArrays
-
-  const decrypt = xorByteArrays
-
   OtpCrypto.encrypt = function (plaintext, key) {
     const bytesUnencrypted = decryptedDataConverter.strToBytes(plaintext)
-    const bytesEncrypted = encrypt(bytesUnencrypted, key)
+    const bytesEncrypted = xorByteArrays(bytesUnencrypted, key)
     if (bytesEncrypted === null) {
       return null
     }
@@ -57,7 +53,7 @@
   OtpCrypto.decrypt = function (base64Encrypted, key) {
     const stringEncrypted = window.atob(base64Encrypted)
     const bytesEncrypted = encryptedDataConverter.strToBytes(stringEncrypted)
-    const bytesDecrypted = decrypt(bytesEncrypted, key)
+    const bytesDecrypted = xorByteArrays(bytesEncrypted, key)
     if (bytesDecrypted === null) {
       return null
     }
