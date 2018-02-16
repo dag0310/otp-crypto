@@ -1,7 +1,14 @@
 # OTP Crypto
 One-time pad crypto library for plaintext data exchange.
 
-## Usage / Example
+## API
+```javascript
+OtpCrypto.generateRandomBytes(numberOfBytes: number) // Returns: Uint8Array of random bytes
+OtpCrypto.encrypt(plaintext: string, key: Uint8Array) // Returns: Object {base64Encrypted: string, remainingKey: Uint8Array, bytesUsed: number} OR null if the key is shorter than the message
+OtpCrypto.decrypt(base64Encrypted: string, key: Uint8Array) // Returns: Object {plaintextDecrypted: string, remainingKey: Uint8Array, bytesUsed: number} OR null if the key is shorter than the message
+```
+
+## Example
 ```javascript
 // Generate a random byte array key with a predefined length:
 let keySender = OtpCrypto.generateRandomBytes(1000)
@@ -9,17 +16,17 @@ let keyReceiver = keySender.slice(0) // copy of key, which in real-life needs to
 
 // Encrypt a message to Base64 with the sender's key:
 const secretMessageUnencrypted = 'TOP SECRET MESSAGE.'
-const otpEncrypted = OtpCrypto.encrypt(secretMessageUnencrypted, keySender) // {base64Encrypted, remainingKey}, returns null if the key is too short
+const otpEncrypted = OtpCrypto.encrypt(secretMessageUnencrypted, keySender)
 keySender = otpEncrypted.remainingKey
 
 // Decrypt the message to plaintext with the receiver's key:
-const otpDecrypted = OtpCrypto.decrypt(otpEncrypted.base64Encrypted, keyReceiver) // {plaintextDecrypted, remainingKey}, returns null if the key is too short
+const otpDecrypted = OtpCrypto.decrypt(otpEncrypted.base64Encrypted, keyReceiver)
 keyReceiver = otpDecrypted.remainingKey
 
 // Extract the decrypted message
 const secretMessageDecrypted = otpDecrypted.plaintextDecrypted // 'TOP SECRET MESSAGE.'
 
-// Now both sender and receiver have the same key again (shorter than before) and can continue sending other messages
+// Now both sender and receiver have the same key again (shorter than before) and can continue sending other messages with the remaining key.
 ```
 
 ## Dev corner
