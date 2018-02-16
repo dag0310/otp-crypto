@@ -25,7 +25,7 @@
     bytesToStr: bytes => (new window.TextDecoder()).decode(bytes)
   }
 
-  OtpCrypto.xorByteArrays = function (messageBytes, keyBytes) {
+  const xorByteArrays = function (messageBytes, keyBytes) {
     if (messageBytes.length > keyBytes.length) {
       return null
     }
@@ -36,9 +36,9 @@
     return resultBytes
   }
 
-  const encrypt = OtpCrypto.xorByteArrays
+  const encrypt = xorByteArrays
 
-  const decrypt = OtpCrypto.xorByteArrays
+  const decrypt = xorByteArrays
 
   OtpCrypto.encrypt = function (plaintext, key) {
     const bytesUnencrypted = decryptedDataConverter.strToBytes(plaintext)

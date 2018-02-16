@@ -1,29 +1,4 @@
 describe('OtpCrypto', function () {
-  it('xorByteArrays calculates correctly', function () {
-    // given
-    const messageBytes = new Uint8Array([0b00000001, 0b00000010, 0b00000011])
-    const keyBytes = new Uint8Array([0b00000001, 0b00000001, 0b00000001])
-    const expectedBytes = new Uint8Array([0b00000000, 0b00000011, 0b00000010])
-
-    // when
-    const resultBytes = OtpCrypto.xorByteArrays(messageBytes, keyBytes)
-
-    // then
-    expect(resultBytes.toString()).toBe(expectedBytes.toString())
-  })
-
-  it('xorByteArrays aborts if the message is longer than the key', function () {
-    // given
-    const messageBytes = new Uint8Array([0b00000001, 0b00000010])
-    const keyBytes = new Uint8Array([0b00000001])
-
-    // when
-    const resultBytes = OtpCrypto.xorByteArrays(messageBytes, keyBytes)
-
-    // then
-    expect(resultBytes).toBe(null)
-  })
-
   it('Plaintext before encryption should be the same as plaintext after decryption', function () {
     // given
     let keySender = OtpCrypto.generateRandomBytes(1000)
