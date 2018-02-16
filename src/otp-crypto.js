@@ -1,17 +1,14 @@
-(function universalModuleDefinition (root, factory) {
+(function (root, factory) {
   'use strict'
-
-  const LIB_NAME = 'OtpCrypto'
-
   if (typeof exports === 'object') {
-    exports[LIB_NAME] = factory()
+    module.exports = factory()
   } else {
-    root[LIB_NAME] = factory()
+    root.returnExports = factory()
   }
 }(this, function () {
   'use strict'
 
-  const publicMethods = {}
+  const OtpCrypto = {}
 
   const encryptedDataConverter = {
     strToBytes: string => new Uint8Array(string.split('').map(char => char.codePointAt(0))),
@@ -27,7 +24,7 @@
     bytesToStr: bytes => (new window.TextDecoder()).decode(bytes)
   }
 
-  publicMethods.xorByteArrays = function (messageBytes, keyBytes) {
+  OtpCrypto.xorByteArrays = function (messageBytes, keyBytes) {
     if (messageBytes.length > keyBytes.length) {
       return null
     }
@@ -38,11 +35,11 @@
     return resultBytes
   }
 
-  const encrypt = publicMethods.xorByteArrays
+  const encrypt = OtpCrypto.xorByteArrays
 
-  const decrypt = publicMethods.xorByteArrays
+  const decrypt = OtpCrypto.xorByteArrays
 
-  publicMethods.encrypt = function (plaintext, key) {
+  OtpCrypto.encrypt = function (plaintext, key) {
     const bytesUnencrypted = decryptedDataConverter.strToBytes(plaintext)
     const bytesEncrypted = encrypt(bytesUnencrypted, key)
     if (bytesEncrypted === null) {
@@ -56,7 +53,7 @@
     return {base64Encrypted, remainingKey, bytesUsed}
   }
 
-  publicMethods.decrypt = function (base64Encrypted, key) {
+  OtpCrypto.decrypt = function (base64Encrypted, key) {
     const stringEncrypted = window.atob(base64Encrypted)
     const bytesEncrypted = encryptedDataConverter.strToBytes(stringEncrypted)
     const bytesDecrypted = decrypt(bytesEncrypted, key)
@@ -70,11 +67,11 @@
     return {plaintextDecrypted, remainingKey, bytesUsed}
   }
 
-  publicMethods.generateRandomBytes = function (numberOfBytes) {
+  OtpCrypto.generateRandomBytes = function (numberOfBytes) {
     let randomBytes = new Uint8Array(numberOfBytes)
     window.crypto.getRandomValues(randomBytes)
     return randomBytes
   }
 
-  return publicMethods
+  window.OtpCrypto = OtpCrypto
 }))
