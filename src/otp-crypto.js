@@ -1,9 +1,10 @@
 (function (root, factory) {
   'use strict'
+
   if (typeof exports === 'object') {
-    module.exports = factory()
+    module.exports = factory() // CommonJS
   } else {
-    root.returnExports = factory()
+    root.OtpCrypto = factory() // Browser global
   }
 }(this, function () {
   'use strict'
@@ -73,5 +74,5 @@
     return randomBytes
   }
 
-  window.OtpCrypto = OtpCrypto
+  return OtpCrypto
 }))
