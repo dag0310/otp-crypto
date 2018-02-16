@@ -1,4 +1,6 @@
 describe('OtpCrypto', function () {
+  const OtpCrypto = window.OtpCrypto
+
   it('Plaintext before encryption should be the same as plaintext after decryption', function () {
     // given
     let keySender = OtpCrypto.generateRandomBytes(1000)

@@ -3,8 +3,5 @@
   "plugins": ["jasmine"],
   "env": {
     "jasmine": true
-  },
-  "globals": {
-    "OtpCrypto": true
   }
 }
