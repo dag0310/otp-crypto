@@ -9,8 +9,6 @@
 }(this, function () {
   'use strict'
 
-  const OtpCrypto = {}
-
   const encryptedDataConverter = {
     strToBytes: string => new Uint8Array(string.split('').map(char => char.codePointAt(0))),
     bytesToStr: bytes => {
@@ -36,7 +34,7 @@
     return resultBytes
   }
 
-  OtpCrypto.encrypt = function (plaintext, key) {
+  const encrypt = function (plaintext, key) {
     const bytesUnencrypted = decryptedDataConverter.strToBytes(plaintext)
     const bytesEncrypted = xorByteArrays(bytesUnencrypted, key)
     if (bytesEncrypted === null) {
@@ -50,7 +48,7 @@
     return {base64Encrypted, remainingKey, bytesUsed}
   }
 
-  OtpCrypto.decrypt = function (base64Encrypted, key) {
+  const decrypt = function (base64Encrypted, key) {
     const stringEncrypted = window.atob(base64Encrypted)
     const bytesEncrypted = encryptedDataConverter.strToBytes(stringEncrypted)
     const bytesDecrypted = xorByteArrays(bytesEncrypted, key)
@@ -64,11 +62,11 @@
     return {plaintextDecrypted, remainingKey, bytesUsed}
   }
 
-  OtpCrypto.generateRandomBytes = function (numberOfBytes) {
+  const generateRandomBytes = function (numberOfBytes) {
     let randomBytes = new Uint8Array(numberOfBytes)
     window.crypto.getRandomValues(randomBytes)
     return randomBytes
   }
 
-  return OtpCrypto
+  return {generateRandomBytes, encrypt, decrypt}
 }))
