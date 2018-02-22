@@ -24,42 +24,37 @@
   }
 
   const xorByteArrays = function (messageBytes, keyBytes) {
-    if (messageBytes.length > keyBytes.length) {
-      return null
-    }
-    const resultBytes = new Uint8Array(messageBytes.length)
-    for (let idx = 0; idx < messageBytes.length; idx++) {
+    const isKeyLongEnough = keyBytes.length >= messageBytes.length
+    const minLength = Math.min(messageBytes.length, keyBytes.length)
+    const resultBytes = new Uint8Array(minLength)
+    for (let idx = 0; idx < minLength; idx++) {
       resultBytes[idx] = messageBytes[idx] ^ keyBytes[idx]
     }
-    return resultBytes
+    return {resultBytes, isKeyLongEnough}
   }
 
   const encrypt = function (plaintext, key) {
     const bytesUnencrypted = decryptedDataConverter.strToBytes(plaintext)
     const bytesEncrypted = xorByteArrays(bytesUnencrypted, key)
-    if (bytesEncrypted === null) {
-      return null
-    }
-    const stringEncrypted = encryptedDataConverter.bytesToStr(bytesEncrypted)
+    const stringEncrypted = encryptedDataConverter.bytesToStr(bytesEncrypted.resultBytes)
     const base64Encrypted = window.btoa(stringEncrypted)
-    const bytesUsed = bytesUnencrypted.length
+    const bytesUsed = bytesEncrypted.resultBytes.length
     const remainingKey = key.slice(bytesUsed)
+    const isKeyLongEnough = bytesEncrypted.isKeyLongEnough
 
-    return {base64Encrypted, remainingKey, bytesUsed}
+    return {base64Encrypted, remainingKey, bytesUsed, isKeyLongEnough}
   }
 
   const decrypt = function (base64Encrypted, key) {
     const stringEncrypted = window.atob(base64Encrypted)
     const bytesEncrypted = encryptedDataConverter.strToBytes(stringEncrypted)
     const bytesDecrypted = xorByteArrays(bytesEncrypted, key)
-    if (bytesDecrypted === null) {
-      return null
-    }
-    const plaintextDecrypted = decryptedDataConverter.bytesToStr(bytesDecrypted)
-    const bytesUsed = bytesEncrypted.length
+    const plaintextDecrypted = decryptedDataConverter.bytesToStr(bytesDecrypted.resultBytes)
+    const bytesUsed = bytesDecrypted.resultBytes.length
     const remainingKey = key.slice(bytesUsed)
+    const isKeyLongEnough = bytesDecrypted.isKeyLongEnough
 
-    return {plaintextDecrypted, remainingKey, bytesUsed}
+    return {plaintextDecrypted, remainingKey, bytesUsed, isKeyLongEnough}
   }
 
   const generateRandomBytes = function (numberOfBytes) {

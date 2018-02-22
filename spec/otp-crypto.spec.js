@@ -16,6 +16,7 @@ describe('OtpCrypto', function () {
 
     // then
     expect(otpDecrypted.plaintextDecrypted).toBe(secretMessageUnencrypted)
+    expect(otpDecrypted.isKeyLongEnough).toBe(true)
   })
 
   it('Sender and receiver keys should be the same after encryption and decryption', function () {
@@ -35,6 +36,7 @@ describe('OtpCrypto', function () {
     expect(keySender.length).toBe(keyReceiver.length)
     expect(keySender.toString()).toBe(keyReceiver.toString())
     expect(otpEncrypted.remainingKey.every((_, idx) => otpEncrypted.remainingKey[idx] === otpDecrypted.remainingKey[idx])).toBe(true)
+    expect(otpEncrypted.isKeyLongEnough).toBe(true)
   })
 
   it('Remaining key should be correctly shortened after encryption', function () {
@@ -48,24 +50,97 @@ describe('OtpCrypto', function () {
     // then
     expect(otpEncrypted.remainingKey.length).toBe(initialKey.length - otpEncrypted.bytesUsed)
     expect(otpEncrypted.remainingKey.toString()).toBe(initialKey.slice(otpEncrypted.bytesUsed).toString())
+    expect(otpEncrypted.isKeyLongEnough).toBe(true)
   })
 
-  it('Encryption should be refused when the key is not long enough', function () {
+  it('Encryption should be incomplete if key not long enough', function () {
     // given
-    const key = OtpCrypto.generateRandomBytes(1)
+    const key = [100]
     const plaintextUnencrypted = 'THIS MESSAGE IS TOO LONG.'
 
-    // when, then
-    expect(OtpCrypto.encrypt(plaintextUnencrypted, key)).toBe(null)
+    // when
+    const otpCryptoResult = OtpCrypto.encrypt(plaintextUnencrypted, key)
+
+    // then
+    expect(otpCryptoResult.isKeyLongEnough).toBe(false)
+    expect(otpCryptoResult.bytesUsed).toBe(1)
+    expect(otpCryptoResult.remainingKey.toString()).toBe('')
+    expect(otpCryptoResult.base64Encrypted).toBe('MA==')
   })
 
-  it('Decryption should be refused when the key is not long enough', function () {
+  it('Decryption should be incomplete if key not long enough', function () {
     // given
-    const key = OtpCrypto.generateRandomBytes(1)
-    const base64Encrypted = 'ABCabc=='
+    const key = [100]
+    const base64Encrypted = 'MC0=' // This encrypted message is too long
 
-    // when, then
-    expect(OtpCrypto.decrypt(base64Encrypted, key)).toBe(null)
+    // when
+    const otpCryptoResult = OtpCrypto.decrypt(base64Encrypted, key)
+
+    // then
+    expect(otpCryptoResult.isKeyLongEnough).toBe(false)
+    expect(otpCryptoResult.bytesUsed).toBe(1)
+    expect(otpCryptoResult.remainingKey.toString()).toBe('')
+    expect(otpCryptoResult.plaintextDecrypted).toBe('T')
+  })
+
+  it('Encryption with no key but message should work', function () {
+    // given
+    const key = []
+    const plaintextUnencrypted = 'test'
+
+    // when
+    const otpCryptoResult = OtpCrypto.encrypt(plaintextUnencrypted, key)
+
+    // then
+    expect(otpCryptoResult.isKeyLongEnough).toBe(false)
+    expect(otpCryptoResult.bytesUsed).toBe(0)
+    expect(otpCryptoResult.remainingKey.toString()).toBe('')
+    expect(otpCryptoResult.base64Encrypted).toBe('')
+  })
+
+  it('Encryption with no key and no message should work', function () {
+    // given
+    const key = []
+    const plaintextUnencrypted = ''
+
+    // when
+    const otpCryptoResult = OtpCrypto.encrypt(plaintextUnencrypted, key)
+
+    // then
+    expect(otpCryptoResult.isKeyLongEnough).toBe(true)
+    expect(otpCryptoResult.bytesUsed).toBe(0)
+    expect(otpCryptoResult.remainingKey.toString()).toBe('')
+    expect(otpCryptoResult.base64Encrypted).toBe('')
+  })
+
+  it('Decryption with no key but message should work', function () {
+    // given
+    const key = []
+    const base64Encrypted = 'MC0=' // This encrypted message is too long
+
+    // when
+    const otpCryptoResult = OtpCrypto.decrypt(base64Encrypted, key)
+
+    // then
+    expect(otpCryptoResult.isKeyLongEnough).toBe(false)
+    expect(otpCryptoResult.bytesUsed).toBe(0)
+    expect(otpCryptoResult.remainingKey.toString()).toBe('')
+    expect(otpCryptoResult.plaintextDecrypted).toBe('')
+  })
+
+  it('Decryption with no key and no message should work', function () {
+    // given
+    const key = []
+    const base64Encrypted = '' // This encrypted message is too long
+
+    // when
+    const otpCryptoResult = OtpCrypto.decrypt(base64Encrypted, key)
+
+    // then
+    expect(otpCryptoResult.isKeyLongEnough).toBe(true)
+    expect(otpCryptoResult.bytesUsed).toBe(0)
+    expect(otpCryptoResult.remainingKey.toString()).toBe('')
+    expect(otpCryptoResult.plaintextDecrypted).toBe('')
   })
 
   it('Bytes generated randomly should have the specified amount', function () {

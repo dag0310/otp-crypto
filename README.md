@@ -4,8 +4,8 @@ One-time pad crypto library for plaintext data exchange.
 ## API
 ```javascript
 OtpCrypto.generateRandomBytes(numberOfBytes: number) // Returns: Uint8Array of random bytes
-OtpCrypto.encrypt(plaintext: string, key: Uint8Array) // Returns: Object {base64Encrypted: string, remainingKey: Uint8Array, bytesUsed: number} OR null if the key is shorter than the message
-OtpCrypto.decrypt(base64Encrypted: string, key: Uint8Array) // Returns: Object {plaintextDecrypted: string, remainingKey: Uint8Array, bytesUsed: number} OR null if the key is shorter than the message
+OtpCrypto.encrypt(plaintext: string, key: Uint8Array) // Returns: Object {base64Encrypted: string, remainingKey: Uint8Array, bytesUsed: number, isKeyLongEnough: boolean}
+OtpCrypto.decrypt(base64Encrypted: string, key: Uint8Array) // Returns: Object {plaintextDecrypted: string, remainingKey: Uint8Array, bytesUsed: number, isKeyLongEnough: boolean}
 ```
 
 ## Example
