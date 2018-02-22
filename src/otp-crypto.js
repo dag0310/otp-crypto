@@ -9,6 +9,48 @@
 }(this, function () {
   'use strict'
 
+  const isNodeJs = typeof window === 'undefined' && typeof global !== 'undefined'
+
+  const envAtob = function (base64) {
+    if (isNodeJs) {
+      const buffer = require('buffer')
+      const Buffer = global.Buffer || buffer.Buffer
+      return Buffer.from(base64, 'base64').toString('binary')
+    }
+    return window.atob(base64)
+  }
+  const envBtoa = function (string) {
+    if (isNodeJs) {
+      const buffer = require('buffer')
+      const Buffer = global.Buffer || buffer.Buffer.from
+      return Buffer.from(string, 'binary').toString('base64')
+    }
+    return window.btoa(string)
+  }
+  const envTextDecoder = function () {
+    if (isNodeJs) {
+      const textEncoding = require('text-encoding')
+      const MyTextDecoder = global.TextDecoder || textEncoding.TextDecoder
+      return new MyTextDecoder()
+    }
+    return new window.TextDecoder()
+  }
+  const envTextEncoder = function () {
+    if (isNodeJs) {
+      const textEncoding = require('text-encoding')
+      const MyTextEncoder = global.TextEncoder || textEncoding.TextEncoder
+      return new MyTextEncoder()
+    }
+    return new window.TextEncoder()
+  }
+  const envCryptoGetRandomValues = function (bytes) {
+    if (isNodeJs) {
+      const getRandomValues = require('get-random-values')
+      return getRandomValues(bytes)
+    }
+    return window.crypto.getRandomValues(bytes)
+  }
+
   const encryptedDataConverter = {
     strToBytes: string => new Uint8Array(string.split('').map(char => char.codePointAt(0))),
     bytesToStr: bytes => {
@@ -19,8 +61,8 @@
   }
 
   const decryptedDataConverter = {
-    strToBytes: string => (new window.TextEncoder()).encode(string),
-    bytesToStr: bytes => (new window.TextDecoder()).decode(bytes)
+    strToBytes: string => envTextEncoder().encode(string),
+    bytesToStr: bytes => envTextDecoder().decode(bytes)
   }
 
   const xorByteArrays = function (messageBytes, keyBytes) {
@@ -37,7 +79,7 @@
     const bytesUnencrypted = decryptedDataConverter.strToBytes(plaintext)
     const bytesEncrypted = xorByteArrays(bytesUnencrypted, key)
     const stringEncrypted = encryptedDataConverter.bytesToStr(bytesEncrypted.resultBytes)
-    const base64Encrypted = window.btoa(stringEncrypted)
+    const base64Encrypted = envBtoa(stringEncrypted)
     const bytesUsed = bytesEncrypted.resultBytes.length
     const remainingKey = key.slice(bytesUsed)
     const isKeyLongEnough = bytesEncrypted.isKeyLongEnough
@@ -46,7 +88,7 @@
   }
 
   const decrypt = function (base64Encrypted, key) {
-    const stringEncrypted = window.atob(base64Encrypted)
+    const stringEncrypted = envAtob(base64Encrypted)
     const bytesEncrypted = encryptedDataConverter.strToBytes(stringEncrypted)
     const bytesDecrypted = xorByteArrays(bytesEncrypted, key)
     const plaintextDecrypted = decryptedDataConverter.bytesToStr(bytesDecrypted.resultBytes)
@@ -59,7 +101,7 @@
 
   const generateRandomBytes = function (numberOfBytes) {
     let randomBytes = new Uint8Array(numberOfBytes)
-    window.crypto.getRandomValues(randomBytes)
+    envCryptoGetRandomValues(randomBytes)
     return randomBytes
   }
 
