@@ -105,5 +105,5 @@
     return randomBytes
   }
 
-  return {generateRandomBytes, encrypt, decrypt}
+  return {generateRandomBytes, encrypt, decrypt, encryptedDataConverter, decryptedDataConverter, xorByteArrays}
 }))
