@@ -57,12 +57,16 @@
       let string = ''
       bytes.forEach(byte => { string += String.fromCodePoint(byte) })
       return string
-    }
+    },
+    base64ToBytes (base64) { return this.strToBytes(envAtob(base64)) },
+    bytesToBase64 (bytes) { return envBtoa(this.bytesToStr(bytes)) }
   }
 
   const decryptedDataConverter = {
     strToBytes: string => envTextEncoder().encode(string),
-    bytesToStr: bytes => envTextDecoder().decode(bytes)
+    bytesToStr: bytes => envTextDecoder().decode(bytes),
+    base64ToBytes (base64) { return this.strToBytes(envAtob(base64)) },
+    bytesToBase64 (bytes) { return envBtoa(this.bytesToStr(bytes)) }
   }
 
   const xorByteArrays = function (messageBytes, keyBytes) {
@@ -72,6 +76,7 @@
     for (let idx = 0; idx < minLength; idx++) {
       resultBytes[idx] = messageBytes[idx] ^ keyBytes[idx]
     }
+
     return {resultBytes, isKeyLongEnough}
   }
 
