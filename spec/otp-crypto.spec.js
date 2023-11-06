@@ -1,6 +1,6 @@
-describe('OtpCrypto', function () {
-  const OtpCrypto = window.OtpCrypto
+import OtpCrypto from '../src/otp-crypto.js'
 
+describe('OtpCrypto', function () {
   it('xorByteArrays calculates correctly', function () {
     // given
     const messageBytes = new Uint8Array([0b00000001, 0b00000010, 0b00000011])

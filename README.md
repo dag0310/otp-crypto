@@ -1,7 +1,17 @@
 # OTP Crypto
+
 One-time pad crypto library for plaintext data exchange.
 
+## Installation
+
+`npm install otp-crypto --save`
+
+## Demo
+
+[Demo page](demo/index.html) - can be found under `demo/index.html`
+
 ## API
+
 ```javascript
 OtpCrypto.generateRandomBytes(numberOfBytes: number) // Returns: Uint8Array of random bytes
 OtpCrypto.encrypt(plaintext: string, key: Uint8Array) // Returns: Object {base64Encrypted: string, remainingKey: Uint8Array, bytesUsed: number, isKeyLongEnough: boolean}
@@ -9,6 +19,7 @@ OtpCrypto.decrypt(base64Encrypted: string, key: Uint8Array) // Returns: Object {
 ```
 
 ## Example
+
 ```javascript
 // Generate a random byte array key with a predefined length:
 let keySender = OtpCrypto.generateRandomBytes(1000)

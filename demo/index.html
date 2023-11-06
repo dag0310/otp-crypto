@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>OTP Crypto</title>
+    <meta name="author" content="Daniel Geymayer">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
     <style>
       body {
         text-align: center;
@@ -19,23 +21,28 @@
   </head>
   <body>
     <h1>OTP Crypto</h1>
-    <input autocomplete="off" readonly value="°^^!§$%&/()=?1234567890ßqwertzuiopü+asdfghjklöä#yxcvbnm,.-QWERTZUIOPÜ*ASDFGHJKLÖÄ'YXCVBNM;:_😩">
-    <br>
-    <textarea id="input" autocomplete="off">HALLO 1 2 3.</textarea>
+    <textarea id="input" autocomplete="off">°^^!§$%&/()=?1234567890ßqwertzuiopü+asdfghjklöä#yxcvbnm,.-QWERTZUIOPÜ*ASDFGHJKLÖÄ'YXCVBNM;:_😩</textarea>
     <textarea id="output" autocomplete="off"></textarea>
     <br>
-    <button type="button" class="mainBtn" onclick="encryptDecrypt()">Encrypt / Decrypt</button>
+    <button type="button" id="mainBtn" class="mainBtn">Encrypt / Decrypt</button>
     <br><br>
     Remaining key length: <span id="remainingKeyLength"></span>
-    <button type="button" onclick="resetKeys()">Reset keys</button>
+    <button type="button" id="resetKeysBtn">Reset keys</button>
 
     <!-- JavaScript -->
-    <script src="../src/otp-crypto.js"></script>
-    <script>
+    <script type="module">
+      import OtpCrypto from '../src/otp-crypto.js'
+
       const DEFAULT_KEY_LENGTH = 1000
       let keySender, keyReceiver
 
-      function encryptDecrypt() {
+      function resetKeys() {
+        keySender = OtpCrypto.generateRandomBytes(DEFAULT_KEY_LENGTH)
+        keyReceiver = keySender.slice(0)
+        document.getElementById('remainingKeyLength').textContent = keySender.length
+      }
+
+      document.getElementById('mainBtn').addEventListener('click', () => {
         // Encrypt
         const plaintextUnencrypted = document.getElementById('input').value
         const otpEncrypted = OtpCrypto.encrypt(plaintextUnencrypted, keySender)
@@ -56,13 +63,11 @@
 
         // Update remaining key length info
         document.getElementById('remainingKeyLength').textContent = keySender.length
-      }
+      })
 
-      function resetKeys() {
-        keySender = OtpCrypto.generateRandomBytes(DEFAULT_KEY_LENGTH)
-        keyReceiver = keySender.slice(0)
-        document.getElementById('remainingKeyLength').textContent = keySender.length
-      }
+      document.getElementById('resetKeysBtn').addEventListener('click', () => {
+        resetKeys()
+      })
 
       resetKeys()
     </script>
