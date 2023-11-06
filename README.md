@@ -8,7 +8,7 @@ One-time pad crypto library for plaintext data exchange.
 
 ## Demo
 
-[Demo page](demo/index.html) - can be found under `demo/index.html`
+[Demo page](https://dag0310.github.io/otp-crypto/demo/) - can be found under `demo/index.html`
 
 ## API
 
