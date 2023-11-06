@@ -13,16 +13,17 @@
   },
   "keywords": [
     "otp",
-    "one-time pad",
+    "one-time-pad",
+    "encryption",
+    "perfect-secrecy",
+    "random",
+    "bytes",
     "vernam",
     "xor",
     "cryptography",
     "crypto",
     "library",
-    "lib",
-    "js",
-    "javascript",
-    "text compression"
+    "lib"
   ],
   "author": "Daniel Geymayer",
   "license": "MIT",
