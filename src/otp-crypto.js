@@ -24,7 +24,6 @@ class OtpCrypto {
     for (let idx = 0; idx < minLength; idx++) {
       resultBytes[idx] = messageBytes[idx] ^ keyBytes[idx]
     }
-
     return { resultBytes, isKeyLongEnough }
   }
 
@@ -36,7 +35,6 @@ class OtpCrypto {
     const bytesUsed = bytesEncrypted.resultBytes.length
     const remainingKey = key.slice(bytesUsed)
     const isKeyLongEnough = bytesEncrypted.isKeyLongEnough
-
     return { base64Encrypted, remainingKey, bytesUsed, isKeyLongEnough }
   }
 
@@ -48,7 +46,6 @@ class OtpCrypto {
     const bytesUsed = bytesDecrypted.resultBytes.length
     const remainingKey = key.slice(bytesUsed)
     const isKeyLongEnough = bytesDecrypted.isKeyLongEnough
-
     return { plaintextDecrypted, remainingKey, bytesUsed, isKeyLongEnough }
   }
 
