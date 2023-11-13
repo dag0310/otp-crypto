@@ -171,6 +171,18 @@ describe('OtpCrypto', function () {
     expect(otpCryptoResult.plaintextDecrypted).toBe('')
   })
 
+  it('Static methods which are not used internally should work as expected', function () {
+    // given
+    const zeroBytesByteArray = new Uint8Array([0])
+    const zeroBytesBase64 = 'AA=='
+
+    // when, then
+    expect(OtpCrypto.encryptedDataConverter.base64ToBytes(zeroBytesBase64)).toEqual(zeroBytesByteArray)
+    expect(OtpCrypto.encryptedDataConverter.bytesToBase64(zeroBytesByteArray)).toEqual(zeroBytesBase64)
+    expect(OtpCrypto.decryptedDataConverter.base64ToBytes(zeroBytesBase64)).toEqual(zeroBytesByteArray)
+    expect(OtpCrypto.decryptedDataConverter.bytesToBase64(zeroBytesByteArray)).toEqual(zeroBytesBase64)
+  })
+
   it('Bytes generated randomly should have the specified amount', function () {
     // given, when, then
     expect(OtpCrypto.generateRandomBytes(30).length).toBe(30)
