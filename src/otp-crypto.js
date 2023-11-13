@@ -1,4 +1,4 @@
-class OtpCrypto {
+export default class OtpCrypto {
   static encryptedDataConverter = {
     strToBytes: string => new Uint8Array(string.split('').map(char => char.codePointAt(0))),
     bytesToStr: bytes => {
@@ -53,5 +53,3 @@ class OtpCrypto {
     return crypto.getRandomValues(new Uint8Array(numberOfBytes))
   }
 }
-
-export default OtpCrypto
