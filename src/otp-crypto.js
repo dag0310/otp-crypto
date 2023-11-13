@@ -7,14 +7,14 @@ class OtpCrypto {
       return string
     },
     base64ToBytes (base64) { return this.strToBytes(atob(base64)) },
-    bytesToBase64 (bytes) { return btoa(this.bytesToStr(bytes)) }
+    bytesToBase64 (bytes) { return btoa(this.bytesToStr(bytes)) },
   }
 
   static decryptedDataConverter = {
     strToBytes: string => new TextEncoder().encode(string),
     bytesToStr: bytes => new TextDecoder().decode(bytes),
     base64ToBytes (base64) { return this.strToBytes(atob(base64)) },
-    bytesToBase64 (bytes) { return btoa(this.bytesToStr(bytes)) }
+    bytesToBase64 (bytes) { return btoa(this.bytesToStr(bytes)) },
   }
 
   static xorByteArrays = function (messageBytes, keyBytes) {
