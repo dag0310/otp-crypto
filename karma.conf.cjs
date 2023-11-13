@@ -14,12 +14,12 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       { pattern: 'src/*.js', type: 'module' },
-      { pattern: 'spec/*.js', type: 'module' }
+      { pattern: 'spec/*.js', type: 'module' },
     ],
 
     // list of files / patterns to exclude
     exclude: [
-      'karma.conf.js'
+      'karma.conf.js',
     ],
 
     // preprocess matching files before serving them to the browser
@@ -55,6 +55,6 @@ module.exports = function (config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
   })
 }
