@@ -1,6 +1,6 @@
 {
   "name": "otp-crypto",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "description": "One-time pad crypto library for plaintext data exchange.",
   "main": "src/otp-crypto.js",
   "types": "src/otp-crypto.d.ts",
