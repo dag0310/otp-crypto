@@ -28,9 +28,9 @@ class OtpCrypto {
   }
 
   static encrypt (plaintext, keyBytes) {
-    const bytesUnencrypted = OtpCrypto.decryptedDataConverter.strToBytes(plaintext)
-    const bytesEncrypted = OtpCrypto.xorByteArrays(bytesUnencrypted, keyBytes)
-    const stringEncrypted = OtpCrypto.encryptedDataConverter.bytesToStr(bytesEncrypted.resultBytes)
+    const bytesUnencrypted = this.decryptedDataConverter.strToBytes(plaintext)
+    const bytesEncrypted = this.xorByteArrays(bytesUnencrypted, keyBytes)
+    const stringEncrypted = this.encryptedDataConverter.bytesToStr(bytesEncrypted.resultBytes)
     const base64Encrypted = btoa(stringEncrypted)
     const bytesUsed = bytesEncrypted.resultBytes.length
     const remainingKey = keyBytes.slice(bytesUsed)
@@ -40,9 +40,9 @@ class OtpCrypto {
 
   static decrypt (base64Encrypted, keyBytes) {
     const stringEncrypted = atob(base64Encrypted)
-    const bytesEncrypted = OtpCrypto.encryptedDataConverter.strToBytes(stringEncrypted)
-    const bytesDecrypted = OtpCrypto.xorByteArrays(bytesEncrypted, keyBytes)
-    const plaintextDecrypted = OtpCrypto.decryptedDataConverter.bytesToStr(bytesDecrypted.resultBytes)
+    const bytesEncrypted = this.encryptedDataConverter.strToBytes(stringEncrypted)
+    const bytesDecrypted = this.xorByteArrays(bytesEncrypted, keyBytes)
+    const plaintextDecrypted = this.decryptedDataConverter.bytesToStr(bytesDecrypted.resultBytes)
     const bytesUsed = bytesDecrypted.resultBytes.length
     const remainingKey = keyBytes.slice(bytesUsed)
     const isKeyLongEnough = bytesDecrypted.isKeyLongEnough
