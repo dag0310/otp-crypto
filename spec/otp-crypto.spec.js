@@ -159,7 +159,7 @@ describe('OtpCrypto', function () {
   it('Decryption with no key and no message should work', function () {
     // given
     const key = []
-    const base64Encrypted = '' // This encrypted message is too long
+    const base64Encrypted = ''
 
     // when
     const otpCryptoResult = OtpCrypto.decrypt(base64Encrypted, key)
