@@ -18,13 +18,14 @@ export default class OtpCrypto {
   }
 
   static xorByteArrays = function (messageBytes, keyBytes) {
-    const isKeyLongEnough = keyBytes.length >= messageBytes.length
+    const bytesLeft = keyBytes.length - messageBytes.length
+    const isKeyLongEnough = bytesLeft >= 0
     const minLength = Math.min(messageBytes.length, keyBytes.length)
     const resultBytes = new Uint8Array(minLength)
     for (let idx = 0; idx < minLength; idx++) {
       resultBytes[idx] = messageBytes[idx] ^ keyBytes[idx]
     }
-    return { resultBytes, isKeyLongEnough }
+    return { resultBytes, bytesLeft, isKeyLongEnough }
   }
 
   static encrypt (plaintext, keyBytes) {
@@ -34,8 +35,9 @@ export default class OtpCrypto {
     const base64Encrypted = btoa(stringEncrypted)
     const bytesUsed = bytesEncrypted.resultBytes.length
     const remainingKey = keyBytes.slice(bytesUsed)
+    const bytesLeft = bytesEncrypted.bytesLeft
     const isKeyLongEnough = bytesEncrypted.isKeyLongEnough
-    return { base64Encrypted, remainingKey, bytesUsed, isKeyLongEnough }
+    return { base64Encrypted, remainingKey, bytesUsed, bytesLeft, isKeyLongEnough }
   }
 
   static decrypt (base64Encrypted, keyBytes) {
@@ -45,8 +47,9 @@ export default class OtpCrypto {
     const plaintextDecrypted = this.decryptedDataConverter.bytesToStr(bytesDecrypted.resultBytes)
     const bytesUsed = bytesDecrypted.resultBytes.length
     const remainingKey = keyBytes.slice(bytesUsed)
+    const bytesLeft = bytesDecrypted.bytesLeft
     const isKeyLongEnough = bytesDecrypted.isKeyLongEnough
-    return { plaintextDecrypted, remainingKey, bytesUsed, isKeyLongEnough }
+    return { plaintextDecrypted, remainingKey, bytesUsed, bytesLeft, isKeyLongEnough }
   }
 
   static generateRandomBytes (numberOfBytes) {
