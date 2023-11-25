@@ -8,15 +8,11 @@ One-time pad crypto library for plaintext data exchange.
 
 ## Demo
 
-[Demo page](https://dag0310.github.io/otp-crypto/demo/) - can be found under `demo/index.html`
+[Demo](https://dag0310.github.io/otp-crypto/demo/) - can be found under `demo/index.html`
 
 ## API
 
-```javascript
-OtpCrypto.generateRandomBytes(numberOfBytes: number) // Returns: Uint8Array of random bytes
-OtpCrypto.encrypt(plaintext: string, keyBytes: Uint8Array) // Returns: Object {base64Encrypted: string, remainingKey: Uint8Array, bytesUsed: number, isKeyLongEnough: boolean}
-OtpCrypto.decrypt(base64Encrypted: string, keyBytes: Uint8Array) // Returns: Object {plaintextDecrypted: string, remainingKey: Uint8Array, bytesUsed: number, isKeyLongEnough: boolean}
-```
+Please refer to the source of truth: [otp-crypto.d.ts](src/otp-crypto.d.ts)
 
 ## Example
 
@@ -37,7 +33,8 @@ keyReceiver = otpDecrypted.remainingKey
 // Extract the decrypted message
 const secretMessageDecrypted = otpDecrypted.plaintextDecrypted // 'TOP SECRET MESSAGE.'
 
-// Now both sender and receiver have the same key again (shorter than before) and can continue sending other messages with the remaining key.
+// Now both sender and receiver have the same key again (shorter than before).
+// They can continue sending more messages with the remaining key.
 ```
 
 ## Dev corner
