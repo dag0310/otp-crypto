@@ -1,6 +1,6 @@
 # OTP Crypto
 
-One-time pad crypto library for plaintext data exchange.
+Pseudo one-time pad crypto library for plaintext data exchange.
 
 ## Installation
 
